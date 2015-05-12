@@ -38,6 +38,8 @@
       <sourceFolder url="file://$MODULE_DIR$/vendor/sensio/framework-extra-bundle" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/vendor/sensio/distribution-bundle" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/vendor/sensio/generator-bundle" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/app/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/app/logs" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
