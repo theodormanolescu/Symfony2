@@ -24,7 +24,8 @@
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "doctrine/doctrine-migrations-bundle": "1.0.*",
-        "snc/redis-bundle": "2.0.*@dev"
+        "snc/redis-bundle": "2.0.*@dev",
+        "predis/predis": "0.8.*@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
