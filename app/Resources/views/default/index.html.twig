@@ -2,4 +2,15 @@
 {% block title %}{{ 'hello_world'|trans }}{% endblock %}
 {% block body %}
     {{ 'hello_world'|trans }}
+{% if currencies is defined %}
+    {% if currencies is iterable %}
+        {% for currency in currencies %}
+            {{ currency }}
+        {% endfor %}
+        {% else %}
+            {{ currencies }}
+    {% endif %}
+{% else %}
+    no currency
+{% endif %}
 {% endblock %}
