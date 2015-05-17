@@ -1,1 +1,11 @@
-bla bla
+{% extends '::base.html.twig' %}
+{% block title %}{{ status_text }}{% endblock %}
+{% block body %}
+<h1>{{ status_code }} - {{ status_text }}</h1>
+<div>
+    <p>The page you're looking for couldn't be found. </p>
+    <p>It looks like this was the result of either a mistyped address, or an out-of-date bookmark.</p>
+    <p>Don't panic, we're tracking this.</p>
+</div>
+
+{% endblock %}
