@@ -30,6 +30,14 @@ class CatalogController extends Controller
     }
 
     /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function treeCategoriesAction()
+    {
+        $arguments = array('categories' => $this->buildTree($this->getCategories()));
+        return $this->render('catalog/category/tree.html.twig', $arguments);
+    }
+    /**
      * @param $categoryId
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -104,5 +112,26 @@ class CatalogController extends Controller
         }
 
         return $categories[$categoryId];
+    }
+
+    /**
+     * @param array $categories
+     * @param null  $parentId
+     *
+     * @return array
+     */
+    private function buildTree(array $categories, $parentId = null)
+    {
+        $tree = array();
+        foreach ($categories as $category) {
+            $parentNode = !$parentId && !$category['parent'];
+            $childNode = $parentId && $category['parent']
+                && $category['parent']['id'] === $parentId;
+            if ($parentNode || $childNode) {
+                $category['children'] = $this->buildTree($categories, $category['id']);
+                $tree[$category['id']] = $category;
+            }
+        }
+        return $tree;
     }
 }

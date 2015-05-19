@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
-{% block body %}
-    <p>Categories</p>
+{% extends 'common/app.html.twig' %}
+{% block header %} Categories {% endblock %}
+{% block content %}
     <table border="1">
         <tr>
             <th>#</th><th>Category</th><th colspan="2">Actions</th>
@@ -22,5 +22,7 @@
             </tr>
         {% endfor %}
     </table>
+{% endblock %}
+{% block footer %}
     <a href="{{ path('catalog_index') }}">Back to catalog</a>
 {% endblock %}
