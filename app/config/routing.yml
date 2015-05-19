@@ -4,3 +4,6 @@ app:
     prefix:   /{_locale}
     requirements:
         _locale: |ro|en
+catalog:
+    prefix: /catalog
+    resource: "@AppBundle/Resources/config/routing/catalog.yml"
