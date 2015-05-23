@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class CatalogController extends Controller
 {
@@ -18,10 +20,19 @@ class CatalogController extends Controller
         return $this->render('catalog/category/list.html.twig', $arguments);
     }
 
-    public function treeCategoriesAction()
+    public function treeCategoriesAction(Request $request)
     {
+        if ($request->getContentType() === 'json') {
+            return $this->treeCategoriesJsonAction();
+        }
+
         $arguments = array('categories' => $this->buildTree($this->getCategories()));
         return $this->render('catalog/category/tree.html.twig', $arguments);
+    }
+
+    public function treeCategoriesJsonAction()
+    {
+        return new JsonResponse($this->buildTree($this->getCategories()));
     }
 
     public function showCategoryAction($categoryId)
@@ -84,4 +95,5 @@ class CatalogController extends Controller
         }
         return $tree;
     }
+
 }
