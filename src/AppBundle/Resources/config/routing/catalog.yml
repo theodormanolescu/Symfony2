@@ -14,6 +14,10 @@ catalog_category_edit:
     path: /category/edit/{categoryId}
     defaults: { _controller: AppBundle:Catalog:editCategory, categoryId:0}
     methods: [GET]
+catalog_category_edit_ajax:
+    path: /category/edit/{categoryId}/ajax
+    defaults: { _controller: AppBundle:Catalog:editCategoryAjax, categoryId:0}
+    methods: [GET]
 catalog_category_save:
     path: /category/edit/{categoryId}
     defaults: { _controller: AppBundle:Catalog:saveCategory, categoryId:0}

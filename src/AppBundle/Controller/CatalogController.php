@@ -50,6 +50,15 @@ class CatalogController extends Controller
         return $this->render('catalog/category/edit.html.twig', $arguments);
     }
 
+    public function editCategoryAjaxAction($categoryId)
+    {
+        $arguments = array(
+            'category' => $this->getCategory($categoryId),
+            'parentCategories' => $this->getCategories(),
+        );
+        return $this->render('catalog/category/edit-ajax.html.twig', $arguments);
+    }
+
     public function saveCategoryAction($categoryId)
     {
         $arguments = array('categoryId' => $categoryId);
