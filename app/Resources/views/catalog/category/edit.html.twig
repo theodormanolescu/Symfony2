@@ -40,5 +40,6 @@
     </form>
 {% endblock %}
 {% block footer %}
+    {{ parent() }}
     <a href="{{ path('catalog_category_list') }}">Back to list</a>
 {% endblock %}
