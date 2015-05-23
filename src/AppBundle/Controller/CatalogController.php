@@ -104,5 +104,4 @@ class CatalogController extends Controller
         }
         return $tree;
     }
-
 }
