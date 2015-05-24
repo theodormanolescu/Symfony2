@@ -21,9 +21,22 @@ class DefaultController extends Controller
         $locale = $request->getLocale();
 
 
-        return $this->render('default/index.html.twig',
+        return $this->render(
+            'default/index.html.twig',
             array(
                 'currencies' => $locale
-            ));
+            )
+        );
+    }
+
+    public function getPhpInfoAction()
+    {
+        $phpinfo = phpinfo();
+        return $this->render(
+            ':common:phpinfo.html.twig',
+            array(
+                'phpinfo' => $phpinfo
+            )
+        );
     }
 }

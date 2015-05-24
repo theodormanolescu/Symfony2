@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class CatalogController
@@ -45,7 +46,13 @@ class CatalogController extends Controller
         $arguments = array('categories' => $this->buildTree($this->getCategories()));
         $response = $this->render('catalog/category/tree.html.twig', $arguments);
         if ($contentType === 'application/json') {
-            $response = new JsonResponse($arguments);
+            $response = new JsonResponse(
+                $arguments,
+                Response::HTTP_OK,
+                array(
+                    'CONTENT_TYPE' => 'application/json'
+                )
+            );
         }
 
         return $response;

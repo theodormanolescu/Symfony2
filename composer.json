@@ -25,7 +25,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "doctrine/doctrine-migrations-bundle": "1.0.*",
         "snc/redis-bundle": "2.0.*@dev",
-        "predis/predis": "0.8.*@dev"
+        "predis/predis": "0.8.*@dev",
+        "friendsofsymfony/jsrouting-bundle": "^1.5"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

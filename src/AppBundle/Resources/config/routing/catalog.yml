@@ -15,6 +15,8 @@ catalog_category_edit:
     methods: [GET]
     requirements:
         categoryId: \d+
+    options:
+        expose: true
 catalog_category_save:
     path: /category/edit/{categoryId}
     defaults: { _controller: AppBundle:Catalog:saveCategory, categoryId:0}
