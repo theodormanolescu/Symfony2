@@ -19,8 +19,8 @@
                     {% for parentCategory in parentCategories %}
                         {% set selected = '' %}
                         {% set parentId = 0 %}
-                        {% if category.parent is not null %}
-                            {% set parentId = category.parent.id %}
+                        {% if category.parentCategory is not null %}
+                            {% set parentId = category.parentCategory.id %}
                         {% endif %}
                         {% if parentId == parentCategory.id %}
                             {% set selected = 'selected' %}

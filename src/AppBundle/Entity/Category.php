@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
+
+    const REPOSITORY = 'AppBundle:Category';
+
     /**
      * @var integer
      *
@@ -60,7 +63,6 @@ class Category
     {
         $this->product = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -150,4 +152,5 @@ class Category
     {
         return $this->product;
     }
+
 }
