@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
+
     /**
      * @var integer
      *
@@ -64,7 +65,6 @@ class Product
         $this->category = new \Doctrine\Common\Collections\ArrayCollection();
         $this->warehouse = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -210,4 +210,10 @@ class Product
     {
         return $this->warehouse;
     }
+
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
+
 }

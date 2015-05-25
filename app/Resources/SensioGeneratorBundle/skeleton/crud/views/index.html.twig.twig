@@ -22,25 +22,20 @@
             <tr>
                 {%- for field, metadata in fields %}
                 {%- if loop.first and ('show' in actions) %}
-
                 <td>
                     <a href="{{ "{{ path('" ~ route_name_prefix ~ 
                         "_show', { 'id': entity."~ identifier ~" }) }}" }}">
                         {{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}
                     </a>
                 </td>
-
                 {%- elseif metadata.type in ['date', 'datetime'] %}
-
                 <td>{{ '{% if entity.' ~ field|replace({'_': ''}) ~ ' %}
                             {{ entity.' ~ field|replace({'_': ''}) ~ 
                             '|date(\'Y-m-d H:i:s\') }}
                         {% endif %}' }}</td>
 
                 {%- else %}
-
                 <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}</td>
-
                 {%- endif %}
 
                 {%- if loop.last %}
@@ -49,7 +44,6 @@
                 </td>
                 {%- endif %}
                 {%- endfor %}
-
             </tr>
             {{ '{% endfor %}' }}
         </tbody>

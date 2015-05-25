@@ -6,9 +6,9 @@
     {{ "{% block header%}" }}
     <h1>{{ entity }}</h1>
     {{ "{% endblock %}" }}
-    
+
     {{ "{% block content%}" }}
-    
+
     <table class="record_properties">
         <tbody>
             {%- for field, metadata in fields %}
@@ -18,8 +18,10 @@
                 {%- if metadata.type in ['date', 'datetime'] %}
                 <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ 
                     '|date(\'Y-m-d H:i:s\') }}' }}</td>
-                {%- else %}
-                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}</td>
+                    {%- else %}
+                <td>
+                    {{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}
+                </td>
                 {%- endif %}
             </tr>
             {%- endfor %}
