@@ -2,7 +2,6 @@
 {% block header %} Categories {% endblock %}
 {% block content %}
 <div id="modal"></div>
-
     <table border="1">
         <tr>
             <th>#</th><th>Category</th><th colspan="2">Actions</th>
@@ -21,8 +20,8 @@
                 <td>{{ category.label }}</td>
                 <td><a href="{{ showUrl }}">Show</a></td>
                 <td><a class="editLink" href="#" onclick="cagetoryModal('{{ editUrl }}')">Edit</a></td>
-                {#<td><a id="editPopup" href="{{ editUrl }}" onclick="popupEdit()">Edit</a></td>#}
             </tr>
         {% endfor %}
     </table>
 {% endblock %}
+
