@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -27,6 +28,7 @@ class Category
      * @var string
      *
      * @ORM\Column(name="label", type="string", length=45, nullable=true)
+     * @Assert\NotBlank(message="The label cannot be empty")
      */
     private $label;
 
@@ -152,4 +154,24 @@ class Category
     {
         return $this->product;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLabel();
+    }
+
+    /**
+     * @Assert\True(message = "Parent category cannot be the same as child")
+     */
+    public function isNotSameAsParent()
+    {
+        if (!$this->getParentCategory()) {
+            return true;
+        }
+        return $this->getId() !== $this->getParentCategory()->getId();
+    }
 }
+

@@ -210,4 +210,12 @@ class Product
     {
         return $this->warehouse;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 }
