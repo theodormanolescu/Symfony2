@@ -75,7 +75,7 @@ class Address
      *
      * @ORM\Column(name="deleted", type="boolean", nullable=true)
      */
-    private $deleted = '0';
+    private $deleted = false;
 
     /**
      * @var \Country
@@ -351,5 +351,10 @@ class Address
     public function getCustomer()
     {
         return $this->customer;
+    }
+    
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

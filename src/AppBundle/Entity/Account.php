@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Account
 {
+
     /**
      * @var integer
      *
@@ -48,8 +49,6 @@ class Account
      * @ORM\Column(name="active", type="boolean", nullable=true)
      */
     private $active;
-
-
 
     /**
      * Get id
@@ -152,4 +151,10 @@ class Account
     {
         return $this->active;
     }
+
+    public function __toString()
+    {
+        return $this->getEmail();
+    }
+
 }

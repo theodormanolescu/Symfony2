@@ -185,4 +185,9 @@ class ProductSale
     {
         return $this->product;
     }
+    
+    public function __toString()
+    {
+        return $this->getProduct()->getTitle();
+    }
 }

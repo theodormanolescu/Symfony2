@@ -153,4 +153,9 @@ class Customer
     {
         return $this->address;
     }
+    
+    public function __toString()
+    {
+        return $this->getContact()->getName();
+    }
 }
