@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Account
  *
  * @ORM\Table(name="account", indexes={@ORM\Index(name="login_index", columns={"login"}), @ORM\Index(name="password_index", columns={"password"})})
  * @ORM\Entity
+ * @UniqueEntity(fields={"login"}, message="This login is not available")
  */
 class Account
 {
