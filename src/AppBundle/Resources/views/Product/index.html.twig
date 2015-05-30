@@ -1,32 +1,50 @@
-    {% extends 'common/app.html.twig' %}
+{% extends 'common/app.html.twig' %}
 
-    {% block header%}
+{% block header%}
     <h1>Product list</h1>
-    {% endblock %}
+{% endblock %}
 
-    {% block content%}
+{% block content%}
     <table class="records_list">
         <thead>
-            <tr>                <th>Id</th>                <th>Code</th>                <th>Title</th>                <th>Description</th>                <th>Actions</th>
+            <tr>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for entity in entities %}
-            <tr>                <td>
-                    <a href="{{ path('product_show', { 'id': entity.id }) }}">
-                        {{ entity.id }}
-                    </a>
-                </td>                <td>{{ entity.code }}</td>                <td>{{ entity.title }}</td>                <td>{{ entity.description }}</td>                <td><div class="actions">    <a class="button" href="{{ path('product_show', { 'id': entity.id }) }}">
-        show
-    </a>    <a class="button" href="{{ path('product_edit', { 'id': entity.id }) }}">
-        edit
-    </a></div>
-                </td>            </tr>
+                <tr>                
+                    <td>
+                        <a href="{{ path('product_show', { 'id': entity.id }) }}">
+                            {{ entity.id }}
+                        </a>
+                    </td>                
+                    <td>{{ entity.code }}</td>                
+                    <td>{{ entity.title }}</td>                
+                    <td>{{ entity.description }}</td>                
+                    <td>
+                        <div class="actions">    
+                            <a class="button" href="{{ path('product_show', { 'id': entity.id }) }}">
+                                show
+                            </a>    
+                            <a class="button" href="{{ path('product_edit', { 'id': entity.id }) }}">
+                                edit
+                            </a>
+                            <a class="button product-acquisition link-dialog" href="{{ path('productacquisition_list', { 'productId': entity.id }) }}">
+                                acquisitions
+                            </a>
+                        </div>
+                    </td>            
+                </tr>
             {% endfor %}
         </tbody>
     </table>
 
-            <a class="button" href="{{ path('product_new') }}">
-            New Product
-        </a>
-        {% endblock %}
+    <a class="button" href="{{ path('product_new') }}">
+        New Product
+    </a>
+{% endblock %}

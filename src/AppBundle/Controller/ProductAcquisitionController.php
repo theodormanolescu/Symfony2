@@ -29,6 +29,17 @@ class ProductAcquisitionController extends Controller
             'entities' => $entities,
         ));
     }
+    
+    public function listAction($productId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('AppBundle:ProductAcquisition')->findBy(array('product' => $productId));
+
+        return $this->render('AppBundle:ProductAcquisition:list.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
     /**
      * Creates a new ProductAcquisition entity.
      *

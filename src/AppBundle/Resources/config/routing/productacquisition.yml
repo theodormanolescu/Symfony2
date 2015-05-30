@@ -28,3 +28,7 @@ productacquisition_delete:
     path:     /{id}/delete
     defaults: { _controller: "AppBundle:ProductAcquisition:delete" }
     methods:  [POST, DELETE]
+
+productacquisition_list:
+    path:     /{productId}/list
+    defaults: { _controller: "AppBundle:ProductAcquisition:list" }

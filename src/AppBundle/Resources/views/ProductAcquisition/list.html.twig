@@ -1,0 +1,28 @@
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                    {{ entity.id }}
+                </td>
+                <td>
+                    {% if entity.date %}
+                        {{ entity.date|date('Y-m-d H:i:s') }}
+                    {% endif %}
+                </td>
+                <td>{{ entity.quantity }}</td>
+                <td>{{ entity.price }}</td>                
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
