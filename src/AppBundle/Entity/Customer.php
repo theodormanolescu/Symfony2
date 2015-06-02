@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Customer
 {
+
+    const REPOSITORY = 'AppBundle:Customer';
+
     /**
      * @var integer
      *
@@ -63,7 +66,6 @@ class Customer
     {
         $this->address = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -153,9 +155,10 @@ class Customer
     {
         return $this->address;
     }
-    
+
     public function __toString()
     {
         return $this->getContact()->getName();
     }
+
 }

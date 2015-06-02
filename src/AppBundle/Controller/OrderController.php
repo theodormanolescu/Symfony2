@@ -2,11 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use AppBundle\Entity\Customer;
 use AppBundle\Entity\Order;
+use AppBundle\Entity\OrderProductLine;
+use AppBundle\Entity\ProductSale;
 use AppBundle\Form\OrderType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Order controller.
@@ -26,31 +29,46 @@ class OrderController extends Controller
         $entities = $em->getRepository('AppBundle:Order')->findAll();
 
         return $this->render('AppBundle:Order:index.html.twig', array(
-            'entities' => $entities,
+                    'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new Order entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Order();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $postOrder = $request->get('appbundle_order');
+        $quantities = $request->get('quantity');
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+        $order = new Order();
 
-            return $this->redirect($this->generateUrl('order_show', array('id' => $entity->getId())));
+        $order->setCustomer(
+                $entityManager
+                        ->getRepository(Customer::REPOSITORY)
+                        ->find($postOrder['customer'])
+        );
+
+        foreach ($postOrder['productLines'] as $productSaleId => $value) {
+            $productLine = new OrderProductLine();
+            $productLine->setProductSale(
+                    $entityManager
+                            ->getRepository(ProductSale::REPOSITORY)
+                            ->find($productSaleId)
+            );
+            $productLine->setQuantity($quantities[$productSaleId]);
+            $entityManager->persist($productLine);
+            $order->addProductLine($productLine);
         }
 
-        return $this->render('AppBundle:Order:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return $this->redirect(
+                        $this->generateUrl('order_show', array('id' => $order->getId()))
+        );
     }
 
     /**
@@ -58,7 +76,7 @@ class OrderController extends Controller
      *
      * @param Order $entity The entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createCreateForm(Order $entity)
     {
@@ -79,11 +97,11 @@ class OrderController extends Controller
     public function newAction()
     {
         $entity = new Order();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return $this->render('AppBundle:Order:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
+                    'entity' => $entity,
+                    'form' => $form->createView(),
         ));
     }
 
@@ -104,8 +122,8 @@ class OrderController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('AppBundle:Order:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+                    'entity' => $entity,
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -127,19 +145,19 @@ class OrderController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('AppBundle:Order:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a Order entity.
-    *
-    * @param Order $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Order entity.
+     *
+     * @param Order $entity The entity
+     *
+     * @return Form The form
+     */
     private function createEditForm(Order $entity)
     {
         $form = $this->createForm(new OrderType(), $entity, array(
@@ -151,6 +169,7 @@ class OrderController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Order entity.
      *
@@ -176,11 +195,12 @@ class OrderController extends Controller
         }
 
         return $this->render('AppBundle:Order:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Order entity.
      *
@@ -210,15 +230,16 @@ class OrderController extends Controller
      *
      * @param mixed $id The entity id
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('order_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
+                        ->setAction($this->generateUrl('order_delete', array('id' => $id)))
+                        ->setMethod('DELETE')
+                        ->add('submit', 'submit', array('label' => 'Delete'))
+                        ->getForm()
         ;
     }
+
 }

@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class OrderType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -15,11 +16,16 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('createDate')
-            ->add('customer')
+                ->add('customer')
+                ->add('productLines', new OrderProductLineEmbeddableType(), array(
+                    'title' => 'products',
+                    'route' => 'productsale_search_by_code',
+                    'columns' => array('code', 'title', 'price', 'quantity'),
+                    'search' => 'code'
+                ))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -37,4 +43,5 @@ class OrderType extends AbstractType
     {
         return 'appbundle_order';
     }
+
 }
