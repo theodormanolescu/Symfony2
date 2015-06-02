@@ -5,8 +5,12 @@
             {% endfor %}
     </tr>
     {% for item in data %}
-        <td>
-            {{ item }}
-        </td>
+        <tr>
+            {% for column in item %}
+                <td>
+                    {{ column }}
+                </td>
+            {% endfor %}
+        </tr>
     {% endfor %}
 </table>
