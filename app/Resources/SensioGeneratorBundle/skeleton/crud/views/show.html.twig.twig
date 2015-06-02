@@ -1,34 +1,47 @@
-{% block extends %}
-    {{ "{% extends 'common/app.html.twig' %}" }}
-{% endblock extends %}
-
-{% block body %}
-    {{ "{% block header%}" }}
-    <h1>{{ entity }}</h1>
-    {{ "{% endblock %}" }}
-
-    {{ "{% block content%}" }}
-
+{% extends 'common/app.html.twig' %}
+{% block header %}
+    <h1>Order</h1>
+{% endblock %}
+{% block content %}
     <table class="record_properties">
         <tbody>
-            {%- for field, metadata in fields %}
-            <tr>
-                <th>{{ field|capitalize }}</th>
-
-                {%- if metadata.type in ['date', 'datetime'] %}
-                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ 
-                    '|date(\'Y-m-d H:i:s\') }}' }}</td>
-                    {%- else %}
-                <td>
-                    {{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}
-                </td>
-                {%- endif %}
-            </tr>
-            {%- endfor %}
+        <tr>
+            <th>Id</th>
+            <td>
+                {{ entity.id }}
+            </td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>
+                {{ entity.status }}
+            </td>
+        </tr>
+        <tr>
+            <th>Createdate</th>
+            <td>{{ entity.createDate|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Products</th>
+            <td>
+                {{ include('AppBundle:OrderProductLine:listing-table.html.twig',
+                {'productLines': entity.productLines}
+                ) }}
+            </td>
+        </tr>
         </tbody>
     </table>
-
-    {% set hide_edit, hide_delete = false, false %}
-    {% include 'crud/views/others/record_actions.html.twig.twig' %}
-    {{ "{% endblock %}" }}
-{% endblock body %}
+    <div class="record-actions">
+        <a class="button" href="{{ path('order') }}">
+            Back to the list
+        </a>
+        <a class="button" href="{{ path('order_edit',
+        { 'id': entity.id }) }}">
+            Edit
+        </a>
+        <div style="float:left">
+            {{ form(delete_form) }}
+        </div>
+        <div style="clear:both"></div>
+    </div>
+{% endblock %}

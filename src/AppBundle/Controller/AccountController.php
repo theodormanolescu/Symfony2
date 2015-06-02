@@ -25,13 +25,18 @@ class AccountController extends Controller
 
         $entities = $em->getRepository('AppBundle:Account')->findAll();
 
-        return $this->render('AppBundle:Account:index.html.twig', array(
-            'entities' => $entities,
-        ));
+        return $this->render(
+            'AppBundle:Account:index.html.twig',
+            array(
+                'entities' => $entities,
+            )
+        );
     }
+
     /**
-     * Creates a new Account entity.
+     * @param Request $request
      *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function createAction(Request $request)
     {
@@ -44,7 +49,10 @@ class AccountController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('account_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl(
+                'account_show',
+                array('id' => $entity->getId()))
+            );
         }
 
         return $this->render('AppBundle:Account:new.html.twig', array(

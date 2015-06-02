@@ -7,7 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrderProductLine
  *
- * @ORM\Table(name="order_product_line", indexes={@ORM\Index(name="fk_order_product_line_order_idx", columns={"order_id"}), @ORM\Index(name="fk_order_product_line_product_sale_idx", columns={"product_sale_id"})})
+ * @ORM\Table(
+ *  name="order_product_line",
+ *  indexes={
+ *      @ORM\Index(name="fk_order_product_line_order_idx", columns={"order_id"}),
+ *      @ORM\Index(name="fk_order_product_line_product_sale_idx", columns={"product_sale_id"})
+ *  }
+ * )
  * @ORM\Entity
  */
 class OrderProductLine
@@ -29,7 +35,7 @@ class OrderProductLine
     private $quantity;
 
     /**
-     * @var \Order
+     * @var Order
      *
      * @ORM\ManyToOne(targetEntity="Order")
      * @ORM\JoinColumns({
@@ -39,7 +45,7 @@ class OrderProductLine
     private $order;
 
     /**
-     * @var \ProductSale
+     * @var ProductSale
      *
      * @ORM\ManyToOne(targetEntity="ProductSale")
      * @ORM\JoinColumns({
@@ -47,8 +53,6 @@ class OrderProductLine
      * })
      */
     private $productSale;
-
-
 
     /**
      * Get id
