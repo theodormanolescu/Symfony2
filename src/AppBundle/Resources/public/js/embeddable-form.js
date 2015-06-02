@@ -14,6 +14,7 @@ $(function () {
         }).autocomplete("instance")._renderItem = function (ul, item) {
             return $("<li>").text(item.code).appendTo(ul);
         };
+        appendInitialRows($(this).data('rows'), name, dataTable);
     });
 });
 
@@ -41,4 +42,14 @@ function createProductRow(product, inputName) {
             .append(price)
             .append(quantity)
             .append(deleteButton);
+}
+
+function appendInitialRows(initialRows, name, dataTable) {
+    if (!initialRows) {
+        return;
+    }
+    for (var index in initialRows) {
+        var row = createProductRow(initialRows[index], name);
+        dataTable.append(row);
+    }
 }
