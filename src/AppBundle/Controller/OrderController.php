@@ -27,9 +27,12 @@ class OrderController extends Controller
 
         $entities = $em->getRepository('AppBundle:Order')->findAll();
 
-        return $this->render('AppBundle:Order:index.html.twig', array(
-            'entities' => $entities,
-        ));
+        return $this->render(
+            'AppBundle:Order:index.html.twig',
+            array(
+                'entities' => $entities,
+            )
+        );
     }
     public function createAction(Request $request)
     {

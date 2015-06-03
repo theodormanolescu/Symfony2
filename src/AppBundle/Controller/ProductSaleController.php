@@ -239,7 +239,7 @@ class ProductSaleController extends Controller
                 ->expr()
                 ->eq('product', 'productSale.product')
             )
-            ->setParameter('code', "$code%")
+            ->setParameter('code', "%$code%")
             ->getQuery()
             ->getResult();
         $response = array();

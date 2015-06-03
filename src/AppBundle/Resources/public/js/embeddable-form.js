@@ -11,7 +11,7 @@ $(function () {
                 dataTable.append(row);
             }
         }).autocomplete("instance")._renderItem = function (ul, item) {
-            return $("<li>").text(item.code).appendTo(ul);
+            return $("<li>" + item.code.replace(this.term, '<b>' + this.term + '</b>') + "</li>").appendTo(ul);
         };
         appendInitialRows($(this).data('rows'), name, dataTable);
     });
