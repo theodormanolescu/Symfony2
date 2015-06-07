@@ -50,3 +50,6 @@ app_category:
     resource: "@AppBundle/Resources/config/routing/category.yml"
     prefix:   /category
 
+app_dashboard:
+    resource: "@AppBundle/Resources/config/routing/dashboard.yml"
+    prefix:   /dashboard

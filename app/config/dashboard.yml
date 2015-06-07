@@ -1,0 +1,45 @@
+app:
+    dashboard:
+        items:
+            account:
+                route: account
+                icon: account.png
+            address:
+                route: address
+                active: false
+            category:
+                route: category
+                icon: category.png
+            contact:
+                route: contact
+                icon: contact.png
+            country:
+                route: country
+                icon: country.png
+            customer:
+                title: clients
+                route: customer
+                icon: customer.png
+            order:
+                title: order management
+                route: order
+                icon: order.png
+            product:
+                title: product management
+                route: product
+                icon: product.png
+            productacquisition:
+                title: product acquisition
+                route: productacquisition
+                icon: acquisition.png
+            productsale:
+                title: product sales
+                route: productsale
+                icon: product_sale.png
+            vendor:
+                title: suppliers
+                route: vendor
+            warehouse:
+                title: warehouses
+                route: warehouse
+                icon: warehouse.png

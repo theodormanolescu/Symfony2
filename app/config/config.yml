@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: doctrine.yml }
+    - { resource: dashboard.yml }
 
 framework:
     #esi:             ~
