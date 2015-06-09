@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
-
+    const REPOSITORY = 'AppBundle:Order';
     const STATUS_NEW = 1;
     const STATUS_PROCESSING = 10;
     const STATUS_DELIVERED = 20;

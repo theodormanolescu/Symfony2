@@ -176,29 +176,44 @@ class OrderController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager();
+        $postOrder = $request->get('appbundle_order');
+        $quantities = $request->get('quantity');
 
-        $entity = $em->getRepository('AppBundle:Order')->find($id);
+        $order = $entityManager->getRepository(Order::REPOSITORY)->find($id);
 
-        if (!$entity) {
+        if (!$order) {
             throw $this->createNotFoundException('Unable to find Order entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
+        $order->setCustomer(
+                $entityManager
+                        ->getRepository(Customer::REPOSITORY)
+                        ->find($postOrder['customer'])
+        );
 
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('order_edit', array('id' => $id)));
+        foreach ($order->getProductLines() as $productLine) {
+            $entityManager->remove($productLine);
         }
 
-        return $this->render('AppBundle:Order:edit.html.twig', array(
-                    'entity' => $entity,
-                    'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
-        ));
+        foreach ($postOrder['productLines'] as $productSaleId => $value) {
+            $productLine = new OrderProductLine();
+            $productLine->setProductSale(
+                    $entityManager
+                            ->getRepository(ProductSale::REPOSITORY)
+                            ->find($productSaleId)
+            );
+            $productLine->setQuantity($quantities[$productSaleId]);
+            $entityManager->persist($productLine);
+            $order->addProductLine($productLine);
+        }
+
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return $this->redirect(
+                        $this->generateUrl('order_show', array('id' => $order->getId()))
+        );
     }
 
     /**

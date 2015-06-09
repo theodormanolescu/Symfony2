@@ -6,9 +6,9 @@
     </tr>
     {% for item in data %}
         <tr>
-            {% for column in item %}
+            {% for column in model %}
                 <td>
-                    {{ column }}
+                    {{ item[column.title] }}
                 </td>
             {% endfor %}
         </tr>

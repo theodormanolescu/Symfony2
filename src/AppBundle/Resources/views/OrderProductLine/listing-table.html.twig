@@ -2,6 +2,7 @@
 
 {% for productLine in productLines %}
     {% set row = {
+        'id': productLine.id,
         'code': productLine.productSale.product.code,
         'title': productLine.productSale.product.title,
         'price': productLine.productSale.price,
