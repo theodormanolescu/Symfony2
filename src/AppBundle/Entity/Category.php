@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Exception\LogicException;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -10,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="category", indexes={@ORM\Index(name="fk_category_category_idx", columns={"parent_category_id"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Category
 {
@@ -34,7 +36,7 @@ class Category
     private $label;
 
     /**
-     * @var \Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
@@ -105,7 +107,7 @@ class Category
      * @param \AppBundle\Entity\Category $parentCategory
      * @return Category
      */
-    public function setParentCategory(\AppBundle\Entity\Category $parentCategory = null)
+    public function setParentCategory(Category $parentCategory = null)
     {
         $this->parentCategory = $parentCategory;
 
@@ -128,7 +130,7 @@ class Category
      * @param \AppBundle\Entity\Product $product
      * @return Category
      */
-    public function addProduct(\AppBundle\Entity\Product $product)
+    public function addProduct(Product $product)
     {
         $this->product[] = $product;
 
@@ -140,7 +142,7 @@ class Category
      *
      * @param \AppBundle\Entity\Product $product
      */
-    public function removeProduct(\AppBundle\Entity\Product $product)
+    public function removeProduct(Product $product)
     {
         $this->product->removeElement($product);
     }
@@ -171,4 +173,13 @@ class Category
         return $this->getId() !== $this->getParentCategory()->getId();
     }
 
+    /**
+     * @ORM\PreRemove
+     */
+    public function preRemove()
+    {
+        if (count($this->getProduct())) {
+            throw new LogicException('Cannot remove a category that has products');
+        }
+    }
 }

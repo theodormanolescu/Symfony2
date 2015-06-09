@@ -38,4 +38,7 @@
             src="{{asset('bundles/app/js/embeddable-form.js')}}" >
     </script>
 {% endblock %}
-
+{% block datePicker_widget %}
+    <input type="text" {{ block('widget_attributes') }}
+            {% if value is not empty %}value="{{ value }}" {% endif %} class="datepicker"/>
+{% endblock datePicker_widget %}

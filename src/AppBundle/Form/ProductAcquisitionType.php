@@ -15,12 +15,11 @@ class ProductAcquisitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
+            ->add('date', new DatePickerType())
             ->add('quantity')
             ->add('price')
             ->add('vendor')
-            ->add('product')
-        ;
+            ->add('product');
     }
     
     /**
@@ -28,9 +27,11 @@ class ProductAcquisitionType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults(
+            array(
             'data_class' => 'AppBundle\Entity\ProductAcquisition'
-        ));
+            )
+        );
     }
 
     /**
