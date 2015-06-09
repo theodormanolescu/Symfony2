@@ -17,6 +17,7 @@ function setupUi() {
             dateFormat: "yy-mm-dd"
         }).datepicker('show');
     });
+    $( ":checkbox" ).button();
 }
 
 function showLinkDialog(link) {
