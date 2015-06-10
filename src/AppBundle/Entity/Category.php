@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Exception\LogicException;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -61,11 +62,19 @@ class Category
     private $product;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parentCategory")
+     */
+    private $childrenCategories;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->product = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->product = new ArrayCollection();
+        $this->childrenCategories = new ArrayCollection();
     }
 
     /**
@@ -125,6 +134,15 @@ class Category
     }
 
     /**
+     * Get childrenCategories
+     * @return \AppBundle\Entity\Category
+     */
+    public function getChildrenCategories()
+    {
+        return $this->childrenCategories;
+    }
+
+    /**
      * Add product
      *
      * @param \AppBundle\Entity\Product $product
@@ -174,12 +192,17 @@ class Category
     }
 
     /**
-     * @ORM\PreRemove
+     * @ORM\PreRemove()
      */
     public function preRemove()
     {
         if (count($this->getProduct())) {
             throw new LogicException('Cannot remove a category that has products');
         }
+
+        if (!empty($this->getChildrenCategories())) {
+            throw new LogicException('Cannot remove a category that has children');
+        }
+
     }
 }
