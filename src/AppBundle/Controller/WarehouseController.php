@@ -23,7 +23,7 @@ class WarehouseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AppBundle:Warehouse')->findAll();
+        $entities = $this->get(\AppBundle\Service\WarehouseService::ID)->getAll();
 
         return $this->render('AppBundle:Warehouse:index.html.twig', array(
             'entities' => $entities,
