@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use AppBundle\Entity\Warehouse;
 use AppBundle\Form\WarehouseType;
 
@@ -26,9 +25,19 @@ class WarehouseController extends Controller
         $entities = $this->get(\AppBundle\Service\WarehouseService::ID)->getAll();
 
         return $this->render('AppBundle:Warehouse:index.html.twig', array(
-            'entities' => $entities,
+                    'entities' => $entities,
         ));
     }
+
+    public function productStocksAction($productId)
+    {
+        $productStocks = $this->get(\AppBundle\Service\WarehouseService::ID)->getProductStocks($productId);
+
+        return $this->render('AppBundle:Product:product_stock.html.twig', array(
+                    'productStocks' => $productStocks,
+        ));
+    }
+
     /**
      * Creates a new Warehouse entity.
      *
@@ -48,8 +57,8 @@ class WarehouseController extends Controller
         }
 
         return $this->render('AppBundle:Warehouse:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
+                    'entity' => $entity,
+                    'form' => $form->createView(),
         ));
     }
 
@@ -79,11 +88,11 @@ class WarehouseController extends Controller
     public function newAction()
     {
         $entity = new Warehouse();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return $this->render('AppBundle:Warehouse:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
+                    'entity' => $entity,
+                    'form' => $form->createView(),
         ));
     }
 
@@ -104,8 +113,8 @@ class WarehouseController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('AppBundle:Warehouse:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+                    'entity' => $entity,
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -127,19 +136,19 @@ class WarehouseController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('AppBundle:Warehouse:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-    * Creates a form to edit a Warehouse entity.
-    *
-    * @param Warehouse $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Warehouse entity.
+     *
+     * @param Warehouse $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Warehouse $entity)
     {
         $form = $this->createForm(new WarehouseType(), $entity, array(
@@ -151,6 +160,7 @@ class WarehouseController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Warehouse entity.
      *
@@ -176,11 +186,12 @@ class WarehouseController extends Controller
         }
 
         return $this->render('AppBundle:Warehouse:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Warehouse entity.
      *
@@ -215,10 +226,11 @@ class WarehouseController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('warehouse_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
+                        ->setAction($this->generateUrl('warehouse_delete', array('id' => $id)))
+                        ->setMethod('DELETE')
+                        ->add('submit', 'submit', array('label' => 'Delete'))
+                        ->getForm()
         ;
     }
+
 }

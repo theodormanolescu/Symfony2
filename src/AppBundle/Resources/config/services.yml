@@ -6,4 +6,4 @@ services:
             
     app.warehouse:
         class: AppBundle\Service\WarehouseService
-        arguments: [@service_container]
+        arguments: [@doctrine]

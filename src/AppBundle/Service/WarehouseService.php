@@ -2,6 +2,9 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\ProductStock;
+use AppBundle\Entity\Warehouse;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 
 class WarehouseService
@@ -9,7 +12,7 @@ class WarehouseService
 
     const ID = 'app.warehouse';
 
-    private $container;
+    private $doctrine;
 
     /**
      *
@@ -17,17 +20,24 @@ class WarehouseService
      */
     private $entityManager;
 
-    public function __construct($container)
+    public function __construct(Registry $doctrine)
     {
-        $this->container = $container;
-        $this->entityManager = $container->get('doctrine')->getManager();
+        $this->doctrine = $doctrine;
+        $this->entityManager = $doctrine->getManager();
     }
 
     public function getAll()
     {
         return $this->entityManager
-                        ->getRepository(\AppBundle\Entity\Warehouse::REPOSITORY)
+                        ->getRepository(Warehouse::REPOSITORY)
                         ->findAll();
+    }
+
+    public function getProductStocks($productId)
+    {
+        return $this->entityManager->
+                        getRepository(ProductStock::REPOSITORY)
+                        ->findBy(array('product' => $productId));
     }
 
 }
