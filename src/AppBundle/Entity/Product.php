@@ -7,7 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Product
  *
- * @ORM\Table(name="product", indexes={@ORM\Index(name="code_index", columns={"code"}), @ORM\Index(name="title_index", columns={"title"})})
+ * @ORM\Table(
+ *  name="product", 
+ *  indexes={
+ *      @ORM\Index(name="code_index", columns={"code"}), 
+ *      @ORM\Index(name="title_index", columns={"title"})
+ *  })
  * @ORM\Entity
  */
 class Product
@@ -53,19 +58,11 @@ class Product
     private $category;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Warehouse", mappedBy="product")
-     */
-    private $warehouse;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         $this->category = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->warehouse = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -178,39 +175,6 @@ class Product
     public function getCategory()
     {
         return $this->category;
-    }
-
-    /**
-     * Add warehouse
-     *
-     * @param \AppBundle\Entity\Warehouse $warehouse
-     * @return Product
-     */
-    public function addWarehouse(\AppBundle\Entity\Warehouse $warehouse)
-    {
-        $this->warehouse[] = $warehouse;
-
-        return $this;
-    }
-
-    /**
-     * Remove warehouse
-     *
-     * @param \AppBundle\Entity\Warehouse $warehouse
-     */
-    public function removeWarehouse(\AppBundle\Entity\Warehouse $warehouse)
-    {
-        $this->warehouse->removeElement($warehouse);
-    }
-
-    /**
-     * Get warehouse
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getWarehouse()
-    {
-        return $this->warehouse;
     }
 
     public function __toString()
