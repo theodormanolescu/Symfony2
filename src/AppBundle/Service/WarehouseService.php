@@ -19,9 +19,14 @@ class WarehouseService extends AbstractDoctrineAware
 
     public function getProductStocks($productId)
     {
-        return $this->entityManager->
-                        getRepository(ProductStock::REPOSITORY)
-                        ->findBy(array('product' => $productId));
+        $stocks = $this->entityManager->
+                getRepository(ProductStock::REPOSITORY)
+                ->findBy(array('product' => $productId));
+        if (empty($stocks)) {
+            $this->logger->addNotice(sprintf('No stocks found for product %s', $productId));
+        }
+
+        return $stocks;
     }
 
 }

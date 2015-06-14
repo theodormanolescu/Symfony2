@@ -6,7 +6,7 @@ services:
     
     app.doctrine_aware:
         class: AppBundle\Service\AbstractDoctrineAware
-        arguments: [@doctrine]
+        arguments: [@doctrine, @?logger]
         abstract: true
         
     app.warehouse:
