@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Exception\AppException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use AppBundle\Entity\Category;
+use AppBundle\Exception\AppException;
 use AppBundle\Form\CategoryType;
+use AppBundle\Service\CatalogService;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Category controller.
@@ -22,9 +22,7 @@ class CategoryController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('AppBundle:Category')->findAll();
+        $entities = $this->get(CatalogService::ID)->getCategories();
 
         return $this->render('AppBundle:Category:index.html.twig', array(
             'entities' => $entities,
