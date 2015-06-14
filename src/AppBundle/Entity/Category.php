@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Category
  *
  * @ORM\Table(name="category", indexes={@ORM\Index(name="fk_category_category_idx", columns={"parent_category_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Category
@@ -46,19 +46,19 @@ class Category
     private $parentCategory;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Product", inversedBy="category")
-     * @ORM\JoinTable(name="category_has_product",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-     *   }
-     * )
-     */
-    private $product;
+    * @var \Doctrine\Common\Collections\Collection
+    *
+    * @ORM\ManyToMany(targetEntity="Product", inversedBy="category")
+    * @ORM\JoinTable(name="category_has_product",
+    *   joinColumns={
+    *     @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="cascade")
+    *   },
+    *   inverseJoinColumns={
+    *     @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="cascade")
+    *   }
+    * )
+    */
+   private $product;
 
     /**
      * Constructor
