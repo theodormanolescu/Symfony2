@@ -3,13 +3,12 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Category;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use AppBundle\Repository\CategoryRepository;
 
-class CategoryFixtures extends AbstractFixture
+class CategoryFixtures extends AbstractDataFixture
 {
 
-    private $manager;
+    private $categoriesCount = 0;
     private $categories = array(
         'computers' => array('servers', 'desktop', 'laptops', 'components', 'periferals'),
         'phones and tablets' => array('phones', 'tablets', 'accessories'),
@@ -17,14 +16,7 @@ class CategoryFixtures extends AbstractFixture
         'video games' => array('consoles', 'games', 'accessories')
     );
 
-    public function load(ObjectManager $manager)
-    {
-        $this->manager = $manager;
-        $this->createAndPersistCategories();
-        $this->manager->flush();
-    }
-
-    private function createAndPersistCategories()
+    protected function createAndPersistData()
     {
         foreach ($this->categories as $parent => $children) {
             $parentCategory = $this->createAndPersistCategory($parent);
@@ -36,11 +28,26 @@ class CategoryFixtures extends AbstractFixture
 
     private function createAndPersistCategory($label, $parentCategory = null)
     {
+        $this->categoriesCount ++;
         $category = new Category();
         $category->setLabel($label)->setParentCategory($parentCategory);
         $this->manager->persist($category);
 
+        $this->setReference(sprintf('category_%s', $this->categoriesCount), $category);
+
         return $category;
+    }
+
+    protected function preLoad()
+    {
+        /* @var $categoryRepository CategoryRepository */
+        $categoryRepository = $this->manager->getRepository(Category::REPOSITORY);
+        $categoryRepository->deleteAll();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 
 }
