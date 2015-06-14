@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="code_index", columns={"code"}), 
  *      @ORM\Index(name="title_index", columns={"title"})
  *  })
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
  */
 class Product
 {
