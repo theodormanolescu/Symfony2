@@ -23,3 +23,9 @@ services:
         parent: app.doctrine_aware
         tags:
             - {name: json_rpc.service, method: createOrder}
+            
+    order:
+        alias: app.order
+    
+    warehouse:
+        alias: app.warehouse
