@@ -1,6 +1,7 @@
 imports:
     - { resource: listeners.yml }
     - { resource: events.xml }
+    - { resource: email_providers.yml }
 
 services:
     app.doctrine_aware:
@@ -29,3 +30,8 @@ services:
     
     warehouse:
         alias: app.warehouse
+    
+    app.email:
+        class: AppBundle\Service\EmailService
+        calls:
+            - ["addProvider", ["@=service('kernel').getEnvironment() === 'dev' ? service('app.provider_email_dev') : service('app.provider_email_php')"]]
