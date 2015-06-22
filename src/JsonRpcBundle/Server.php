@@ -12,6 +12,8 @@ class Server extends ContainerAware
 
     const ID = 'json_rpc.server';
 
+    private $allowedMethods = array();
+
     public function handle($request, $serviceId)
     {
         $encoder = new JsonEncoder();
@@ -22,21 +24,19 @@ class Server extends ContainerAware
         }
 
         $request = $this->resolveOptions($request);
-        
+
         if (!$this->isAllowed($serviceId, $request['method'])) {
             return new ErrorResponse(
-                    ErrorResponse::ERROR_CODE_METHOD_NOT_FOUND, 
-                    sprintf('%s does not exist', $request['method'])
+                    ErrorResponse::ERROR_CODE_METHOD_NOT_FOUND, sprintf('%s does not exist', $request['method'])
             );
         }
 
         $service = $this->container->get($serviceId);
         $result = call_user_func_array(
                 array(
-                    $service,
-                    $request['method']
-                ),
-                $request['params']
+            $service,
+            $request['method']
+                ), $request['params']
         );
 
         return new SuccessResponse($request['id'], $result);
@@ -44,7 +44,7 @@ class Server extends ContainerAware
 
     private function isAllowed($serviceId, $method)
     {
-        return true;
+        return in_array(sprintf('%s->%s', $serviceId, $method), $this->allowedMethods);
     }
 
     private function resolveOptions($request)
@@ -57,6 +57,11 @@ class Server extends ContainerAware
                 ->setDefault('params', array())
                 ->addAllowedValues('jsonrpc', Response::VERSION);
         return $resolver->resolve($request);
+    }
+
+    public function addAllowedMethod($serviceId, $method)
+    {
+        $this->allowedMethods[] = sprintf('%s->%s', $serviceId, $method);
     }
 
 }

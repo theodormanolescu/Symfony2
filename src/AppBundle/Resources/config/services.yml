@@ -12,6 +12,8 @@ services:
     app.warehouse:
         class: AppBundle\Service\WarehouseService
         parent: app.doctrine_aware
+        tags:
+            - {name: json_rpc.service, method: getAll}
         
     app.catalog:
         class: AppBundle\Service\CatalogService
