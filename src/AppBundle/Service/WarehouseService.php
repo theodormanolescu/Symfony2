@@ -13,8 +13,11 @@ class WarehouseService extends AbstractDoctrineAware
     public function getAll()
     {
         return $this->entityManager
-                        ->getRepository(Warehouse::REPOSITORY)
-                        ->findAll();
+                ->createQueryBuilder()
+                ->select('warehouse')
+                ->from(Warehouse::REPOSITORY, 'warehouse')
+                ->getQuery()
+                ->getArrayResult();
     }
 
     public function getProductStocks($productId)
