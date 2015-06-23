@@ -4,19 +4,39 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\ProductStock;
 use AppBundle\Entity\Warehouse;
+use AppBundle\Entity\Order;
 
+/**
+ * Class WarehouseService
+ *
+ * @package AppBundle\Service
+ */
 class WarehouseService extends AbstractDoctrineAware
 {
 
+    /**
+     *
+     */
     const ID = 'app.warehouse';
 
+    /**
+     * @return \AppBundle\Entity\Warehouse[]|array
+     */
     public function getAll()
     {
         return $this->entityManager
-                        ->getRepository(Warehouse::REPOSITORY)
-                        ->findAll();
+            ->createQueryBuilder()
+            ->select('warehouse')
+            ->from(Warehouse::REPOSITORY, 'warehouse')
+            ->getQuery()
+            ->getArrayResult();
     }
 
+    /**
+     * @param $productId
+     *
+     * @return \AppBundle\Entity\ProductStock[]|array
+     */
     public function getProductStocks($productId)
     {
         $stocks = $this->entityManager->
@@ -27,6 +47,9 @@ class WarehouseService extends AbstractDoctrineAware
         }
 
         return $stocks;
+    }
+    public function reserveProducts(Order $order)
+    {
     }
 
 }
