@@ -35,3 +35,7 @@ services:
         class: AppBundle\Service\EmailService
         calls:
             - ["addProvider", ["@=service('kernel').getEnvironment() === 'dev' ? service('app.provider_email_dev') : service('app.provider_email_php')"]]
+    
+    event_dispatcher:
+        class: AppBundle\Event\EventDispatcher
+        arguments: [@service_container]

@@ -3,8 +3,9 @@
 namespace AppBundle\Event\Order;
 
 use AppBundle\Entity\Order;
+use AppBundle\Event\LoggableEventInterface;
 
-class OrderAfterCreate extends OrderEvent
+class OrderAfterCreate extends OrderEvent implements LoggableEventInterface
 {
 
     /**
@@ -21,6 +22,11 @@ class OrderAfterCreate extends OrderEvent
     public function getOrder()
     {
         return $this->order;
+    }
+
+    public function getLogContext()
+    {
+        return array('id' => $this->order->getId());
     }
 
 }

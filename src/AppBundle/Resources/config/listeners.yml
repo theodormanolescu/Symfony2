@@ -6,7 +6,6 @@ services:
                 
     app.order_listener:
         class: AppBundle\Event\Listener\OrderListener
-        parent: app.doctrine_aware
         calls:
             - [setWarehouseService, ["@app.warehouse"]]
         tags:
