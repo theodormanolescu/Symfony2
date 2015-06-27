@@ -2,8 +2,10 @@
 
 namespace AppBundle\Event\Listener;
 
-use AppBundle\Event\Order\OrderAfterCreate;
+use AppBundle\Entity\Order;
 use AppBundle\Event\Order\OrderBeforeCreate;
+use AppBundle\Event\Order\OrderEvent;
+use AppBundle\Service\DeliveryService;
 use AppBundle\Service\WarehouseService;
 
 class OrderListener
@@ -15,20 +17,57 @@ class OrderListener
      */
     private $warehouseService;
 
+    /**
+     *
+     * @var DeliveryService
+     */
+    private $deliveryService;
+
+    public function __construct(WarehouseService $warehouseService, DeliveryService $deliveryService)
+    {
+        $this->warehouseService = $warehouseService;
+        $this->deliveryService = $deliveryService;
+    }
+
     public function onBeforeCreate(OrderBeforeCreate $event)
     {
         
     }
 
-    public function onAfterCreate(OrderAfterCreate $event)
+    public function onAfterCreate(OrderEvent $event)
     {
         $this->warehouseService->reserveProducts($event->getOrder());
     }
 
-    public function setWarehouseService(WarehouseService $warehouseService)
+    public function onReservationFailed(OrderEvent $event)
     {
-        $this->warehouseService = $warehouseService;
-        return $this;
+        $event->getOrder()->setStatus(Order::STATUS_PROCESSING_PRODUCTS_MISSING);
+    }
+
+    public function onProductsReserved(OrderEvent $event)
+    {
+        $event->getOrder()->setStatus(Order::STATUS_PROCESSING_PRODUCTS_RESERVED);
+        $this->warehouseService->packageProducts($event->getOrder());
+    }
+
+    public function onPackagingStart(OrderEvent $event)
+    {
+        $event->getOrder()->setStatus(Order::STATUS_PROCESSING_PACKAGING);
+    }
+
+    public function onPackagingEnd(OrderEvent $event)
+    {
+        $this->deliveryService->deliverProducts($event->getOrder());
+    }
+
+    public function onDeliveryStart(OrderEvent $event)
+    {
+        $event->getOrder()->setStatus(Order::STATUS_DELIVERY_STARTED);
+    }
+
+    public function onDeliveryEnd(OrderEvent $event)
+    {
+        $event->getOrder()->setStatus(Order::STATUS_DELIVERED);
     }
 
 }

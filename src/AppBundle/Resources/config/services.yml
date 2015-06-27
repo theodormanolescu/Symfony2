@@ -7,35 +7,36 @@ services:
     app.doctrine_aware:
         class: AppBundle\Service\AbstractDoctrineAware
         arguments: [@doctrine, @logger, @event_dispatcher]
-        abstract: true
-        
+        abstract: true        
     app.warehouse:
         class: AppBundle\Service\WarehouseService
         parent: app.doctrine_aware
         tags:
-            - {name: json_rpc.service, method: getAll}
-        
+            - {name: json_rpc.service, method: getAll}        
     app.catalog:
         class: AppBundle\Service\CatalogService
-        parent: app.doctrine_aware
-        
+        parent: app.doctrine_aware        
     app.order:
         class: AppBundle\Service\OrderService
         parent: app.doctrine_aware
         tags:
-            - {name: json_rpc.service, method: createOrder}
-            
-    order:
-        alias: app.order
-    
-    warehouse:
-        alias: app.warehouse
-    
+            - {name: json_rpc.service, method: createOrder}            
+    order: @app.order    
+    warehouse: @app.warehouse    
     app.email:
-        class: AppBundle\Service\EmailService
+        class: AppBundle\Service\Communication\EmailService
+        public: false
         calls:
-            - ["addProvider", ["@=service('kernel').getEnvironment() === 'dev' ? service('app.provider_email_dev') : service('app.provider_email_php')"]]
-    
+            - ["addProvider", ["@=service('kernel').getEnvironment() === 'dev' ? service('app.provider_email_dev') : service('app.provider_email_php')"]]    
+    app.communication:
+        class: AppBundle\Service\Communication\CommunicationService
+        arguments: [@app.email]        
     event_dispatcher:
         class: AppBundle\Event\EventDispatcher
-        arguments: [@service_container]
+        arguments: [@service_container]        
+    app.document:
+        class: AppBundle\Service\DocumentService
+        parent: app.doctrine_aware        
+    app.delivery:
+        class: AppBundle\Service\DeliveryService
+        parent: app.doctrine_aware

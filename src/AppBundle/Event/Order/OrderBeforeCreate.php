@@ -3,8 +3,9 @@
 namespace AppBundle\Event\Order;
 
 use AppBundle\Event\LoggableEventInterface;
+use Symfony\Component\EventDispatcher\Event;
 
-class OrderBeforeCreate extends OrderEvent implements LoggableEventInterface
+class OrderBeforeCreate extends Event implements LoggableEventInterface
 {
 
     private $customerId;

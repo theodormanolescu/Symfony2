@@ -6,7 +6,6 @@ use AppBundle\Entity\Customer;
 use AppBundle\Entity\Order;
 use AppBundle\Entity\OrderProductLine;
 use AppBundle\Entity\ProductSale;
-use AppBundle\Event\Order\OrderAfterCreate;
 use AppBundle\Event\Order\OrderBeforeCreate;
 use AppBundle\Event\Order\OrderEvent;
 
@@ -25,7 +24,8 @@ class OrderService extends AbstractDoctrineAware
         }
         $this->entityManager->persist($order);
         $this->entityManager->flush();
-        $this->eventDispatcher->dispatch(OrderEvent::AFTER_CREATE, new OrderAfterCreate($order));
+        $this->eventDispatcher->dispatch(OrderEvent::AFTER_CREATE, new OrderEvent($order));
+        $this->entityManager->flush();
         return $order->getId();
     }
 
