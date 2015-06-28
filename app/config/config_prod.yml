@@ -29,3 +29,9 @@ monolog:
             path:   "%kernel.logs_dir%/json-rpc-%kernel.environment%.log"
             level:  info
             channels: ["json_rpc"]
+        elasticsearch:
+            type:   elasticsearch
+            elasticsearch:
+                host: localhost
+            level: info
+            channels: [app, json_rpc]
