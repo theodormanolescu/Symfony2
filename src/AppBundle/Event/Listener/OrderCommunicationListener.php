@@ -28,7 +28,7 @@ class OrderCommunicationListener
     public function onInvoiceGenerated(OrderEvent $event)
     {
         $emailAddress = $this->getEmailAddress($event);
-        $this->communicationService->sendDeliveryEmail($emailAddress, $event->getOrder()->getId());
+        $this->communicationService->sendInvoice($emailAddress, $event->getOrder()->getId());
     }
 
     public function onDeliveryStart(OrderEvent $event)
