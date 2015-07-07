@@ -3,8 +3,9 @@
 namespace AppBundle\Service\Communication;
 
 use AppBundle\Communication\Email\Message;
+use AppBundle\Document\Email;
 use AppBundle\Event\Communication\Email\EmailEvent;
-use AppBundle\Event\Communication\Email\EmailSent;
+use AppBundle\Event\Communication\Email\EmailSendingEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Templating\EngineInterface as Templating;
 use Symfony\Component\Translation\TranslatorInterface as Translator;
@@ -54,9 +55,6 @@ class CommunicationService
     public function sendConfirmationEmail($emailAddress, $name, $orderNumber, $locale = 'en')
     {
         $arguments = array('customerName' => $name, 'orderNumber' => $orderNumber);
-        $this->eventDispatcher->dispatch(
-            EmailEvent::BEFORE_SEND, new EmailEvent('confirmation', $emailAddress, $arguments)
-        );
         return $this->sendEmail('confirmation', $emailAddress, $locale, $arguments);
     }
 
@@ -77,13 +75,26 @@ class CommunicationService
 
     private function sendEmail($type, $emailAddress, $locale, $arguments)
     {
+        $this->eventDispatcher->dispatch(
+            EmailEvent::BEFORE_SEND, new EmailEvent($type, $emailAddress, $arguments)
+        );
         $this->translator->setLocale($locale);
         $message = $this->constructEmailMessage($type, $emailAddress, $arguments);
         $status = $this->emailService->send($message);
-        $this->eventDispatcher->dispatch(
-                EmailEvent::SENT, new EmailSent($type, $emailAddress, $arguments, $message)
-        );
+        $this->dispatchEmailSendingEvent($type, $arguments, $message, $status);
         return $status;
+    }
+    
+    private function dispatchEmailSendingEvent($type, $arguments, $message, $status)
+    {
+        $event = new EmailSendingEvent($type, $arguments, $message);
+
+        $eventNames = array(
+            Email::STATUS_SENT => EmailSendingEvent::SENT,
+            Email::STATUS_TEMPORARY_ERROR => EmailSendingEvent::ERROR_TEMPORARY,
+            Email::STATUS_PERMANENT_ERROR => EmailSendingEvent::ERROR_PERMANENT
+        );
+        $this->eventDispatcher->dispatch($eventNames[$status], $event);
     }
 
     private function renderTempalate($type, $arguments)

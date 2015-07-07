@@ -4,7 +4,7 @@ namespace AppBundle\Event\Communication\Email;
 
 use AppBundle\Communication\Email\Message;
 
-class EmailSent extends EmailEvent
+class EmailSendingEvent extends EmailEvent
 {
 
     /**
@@ -13,9 +13,9 @@ class EmailSent extends EmailEvent
      */
     private $message;
 
-    public function __construct($type, $emailAddress, $arguments, Message $message)
+    public function __construct($type, $arguments, Message $message)
     {
-        parent::__construct($type, $emailAddress, $arguments);
+        parent::__construct($type, $message->getTo(), $arguments);
         $this->message = $message;
     }
 
