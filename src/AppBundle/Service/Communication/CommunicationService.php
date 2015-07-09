@@ -55,7 +55,7 @@ class CommunicationService
     public function sendConfirmationEmail($emailAddress, $name, $orderNumber, $locale = 'en')
     {
         $arguments = array('customerName' => $name, 'orderNumber' => $orderNumber);
-        return $this->sendEmail('confirmation', $emailAddress, $locale, $arguments);
+        return $this->sendEmail('confirmation', $emailAddress, $arguments, $locale);
     }
 
     public function sendDeliveryEmail($emailAddress, $orderNumber)
@@ -73,7 +73,7 @@ class CommunicationService
         
     }
 
-    private function sendEmail($type, $emailAddress, $locale, $arguments)
+    public function sendEmail($type, $emailAddress, $arguments, $locale = 'en')
     {
         $this->eventDispatcher->dispatch(
             EmailEvent::BEFORE_SEND, new EmailEvent($type, $emailAddress, $arguments)

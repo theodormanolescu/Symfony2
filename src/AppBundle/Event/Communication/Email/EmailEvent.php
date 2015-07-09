@@ -12,6 +12,7 @@ class EmailEvent extends Event implements LoggableEventInterface
     const ERROR_TEMPORARY = 'email.error_temporary';
     const ERROR_PERMANENT = 'email.error_permanent';
     const SENT = 'email.sent';
+    const RESEND = 'email.resend';
 
     private $type;
     private $emailAddress;
