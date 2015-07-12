@@ -15,6 +15,9 @@ security:
         login:
             pattern: ^/login
             security: false
+        api:
+            pattern: ^/json-rpc
+            http_basic: ~
         app:
             pattern: .*
             form_login:
@@ -23,4 +26,8 @@ security:
             logout:
                 path: /logout
                 target: /dashboard
-                
+    
+    access_control:
+        - { path: ^/json-rpc, role: ROLE_API}
+        - { path: ^/admin, role: ROLE_ADMIN}
+        - { path: ^/, role: [ROLE_USER, ROLE_ADMIN]}
