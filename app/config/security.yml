@@ -1,14 +1,12 @@
 security:
     providers:
-        in_memory:
-            memory:
-                users:
-                    user:
-                        password: pass
-                        roles: ROLE_USER
-
+        access_service:
+            id: access.user_provider
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        AccessBundle\User: 
+            algorithm: sha512
+            encode_as_base64: false
+            iterations: 0
 
     firewalls:
         dev:
@@ -25,3 +23,4 @@ security:
             logout:
                 path: /logout
                 target: /dashboard
+                

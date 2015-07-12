@@ -1,4 +1,4 @@
 services:
-#    access.example:
-#        class: AccessBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    access.user_provider:
+        class: AccessBundle\UserProvider
+        arguments: [@doctrine_mongodb]
