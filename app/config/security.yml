@@ -1,12 +1,27 @@
 security:
     providers:
         in_memory:
-            memory: ~
-
+            memory:
+                users:
+                    user:
+                        password: pass
+                        roles: ROLE_USER
+                        
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt|error)|css|images|js)/
             security: false
-
-        default:
-            anonymous: ~
+        login:
+            pattern: ^/login
+            security: false
+        app:
+            pattern: .*
+            form_login:
+                check_path: /check
+                login_path: /login
+            logout:
+                path: /logout
+                target: /dashboard
