@@ -1,6 +1,8 @@
 app:
     dashboard:
         items:
+            admin:
+                route: admin
             account:
                 route: account
                 icon: account.png

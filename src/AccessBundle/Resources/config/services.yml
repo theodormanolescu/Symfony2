@@ -2,3 +2,6 @@ services:
     access.user_provider:
         class: AccessBundle\UserProvider
         arguments: [@doctrine_mongodb]
+    access.user:
+        class: AccessBundle\UserService
+        arguments: [@doctrine_mongodb]

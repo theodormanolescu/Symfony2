@@ -54,7 +54,7 @@ class User
     }
 
     public function setPassword($password) {
-        $this->password = $password;
+        $this->password = bin2hex(hash('sha512', $password, true));
         return $this;
     }
 

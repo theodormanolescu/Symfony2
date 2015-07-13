@@ -34,12 +34,14 @@ class UserProvider implements UserProviderInterface
     }
 
     public function loadUserByUsername($username) {
-        /* @var $userDocument UserDocument  */
-        $userDocument = $this->repository->findOneByUsername($username);
-        if (!$userDocument) {
+        /* @var $user UserDocument  */
+        $user = $this->repository->findOneByUsername($username);
+        if (!$user) {
             throw new UsernameNotFoundException();
         }
-        return new User($userDocument->getUsername(), $userDocument->getPassword(), $userDocument->getRoles());
+        return new User(
+                $user->getUsername(), $user->getPassword(), $user->getRoles()
+        );
     }
 
     public function refreshUser(UserInterface $user) {
