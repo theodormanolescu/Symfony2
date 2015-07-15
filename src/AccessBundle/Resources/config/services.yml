@@ -5,3 +5,8 @@ services:
     access.user:
         class: AccessBundle\UserService
         arguments: [@doctrine_mongodb]
+    access.api_voter:
+        class:      AccessBundle\ApiVoter
+        public:     false
+        tags:
+           - { name: security.voter }

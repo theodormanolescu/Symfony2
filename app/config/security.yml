@@ -18,6 +18,9 @@ security:
         api:
             pattern: ^/json-rpc
             http_basic: ~
+        external_provider:
+            pattern: ^/communication/external_provider
+            security: false
         app:
             pattern: .*
             form_login:

@@ -10,9 +10,18 @@ class UserFixtures extends AbstractFixture
 {
 
     private $users = array(
-        array('username' => 'user', 'password' => 'pass', 'roles' => array('ROLE_USER')),
-        array('username' => 'admin', 'password' => 'pass', 'roles' => array('ROLE_ADMIN')),
-        array('username' => 'api_user', 'password' => 'pass', 'roles' => array('ROLE_API')),
+        array('username' => 'user', 'password' => 'pass',
+            'roles' => array('ROLE_USER')),
+        array('username' => 'admin', 'password' => 'pass',
+            'roles' => array('ROLE_ADMIN')),
+        array('username' => 'api_user', 'password' => 'pass',
+            'roles' => array('ROLE_API')),
+        array('username' => 'api_warehouse', 'password' => 'pass',
+            'roles' => array('ROLE_API', 'ROLE_API_WAREHOUSE')),
+        array('username' => 'api_order', 'password' => 'pass',
+            'roles' => array('ROLE_API', 'ROLE_API_ORDER')),
+        array('username' => 'api_all', 'password' => 'pass',
+            'roles' => array('ROLE_API', 'ROLE_API_ORDER', 'ROLE_API_WAREHOUSE')),
     );
 
     public function load(ObjectManager $manager) {

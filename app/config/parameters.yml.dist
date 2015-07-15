@@ -21,3 +21,5 @@ parameters:
     fixtures:
         products_per_category: #number
     communication.external_provider_host: #http://
+    communication.username: #user
+    communication.password: #pass
