@@ -36,7 +36,7 @@ services:
         arguments: [@service_container]        
     app.document:
         class: AppBundle\Service\Document\DocumentService
-        arguments: [@templating, @event_dispatcher, @doctrine_mongodb]
+        arguments: [@templating, @event_dispatcher, @doctrine_mongodb, @old_sound_rabbit_mq.document_producer]
     app.delivery:
         class: AppBundle\Service\DeliveryService
         parent: app.doctrine_aware

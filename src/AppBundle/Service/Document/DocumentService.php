@@ -5,10 +5,13 @@ namespace AppBundle\Service\Document;
 use AppBundle\Document\Document;
 use AppBundle\Document\ProductLine;
 use AppBundle\Entity\Order;
+use AppBundle\Event\Document\DocumentEvent;
 use AppBundle\Event\Order\OrderEvent;
 use AppBundle\Exception\Document\DocumentNotFoundException;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Templating\EngineInterface as Templating;
@@ -36,14 +39,22 @@ class DocumentService
      */
     private $documentManager;
 
+    /**
+     *
+     * @var Producer
+     */
+    private $documentProducer;
+
     public function __construct(
         Templating $twigEngine,
         EventDispatcherInterface $eventDispatcher,
-        ManagerRegistry $documentManager
+        ManagerRegistry $documentManager,
+        Producer $documentProducer
     ) {
         $this->twigEngine = $twigEngine;
         $this->eventDispatcher = $eventDispatcher;
         $this->documentManager = $documentManager->getManager();
+        $this->documentProducer = $documentProducer;
     }
 
     public function getInvoiceHtml($orderNumber) {
@@ -58,17 +69,13 @@ class DocumentService
     }
 
     public function generateInvoice(Order $order) {
-        $templateName = 'AppBundle:Document:invoice.html.twig';
         $document = $this->createDocumentFromOrder($order);
-        $html = $this->twigEngine->render($templateName, array('document' => $document));
-        $document->setBodyHtml($html);
-        $document->setBodyPdf($this->convertHtmlToPdf($html));
+        $this->eventDispatcher->dispatch(
+                DocumentEvent::INVOICE_GENERATE_START, new DocumentEvent($document)
+        );
         $this->documentManager->persist($document);
         $this->documentManager->flush();
-
-        $this->eventDispatcher->dispatch(
-                OrderEvent::INVOICE_GENERATED, new OrderEvent($order)
-        );
+        $this->documentProducer->publish($document->getId(), 'document.invoice');
     }
 
     private function createDocumentFromOrder(Order $order) {
@@ -113,6 +120,23 @@ class DocumentService
         $process = new Process(sprintf("echo '%s' | wkhtmltopdf - -", $html));
         $process->run();
         return $process->getOutput();
+    }
+
+    public function execute(AMQPMessage $amqpMessage) {
+        $documentId = $amqpMessage->body;
+        $repository = $this->documentManager->getRepository(Document::REPOSITORY);
+        $document = $repository->find($documentId);
+        $templateName = 'AppBundle:Document:invoice.html.twig';
+        $html = $this->twigEngine->render($templateName, array('document' => $document));
+        $document->setBodyHtml($html);
+        $document->setBodyPdf($this->convertHtmlToPdf($html));
+        $this->documentManager->flush();
+
+        $this->eventDispatcher->dispatch(
+                DocumentEvent::INVOICE_GENERATE_FINISH, new DocumentEvent($document)
+        );
+
+        return true;
     }
 
 }

@@ -15,7 +15,6 @@ class OrderEvent extends Event implements LoggableEventInterface
     const PRODUCTS_RESERVED = 'order.products_reserved';
     const PACKAGING_START = 'order.packaging_start';
     const PACKAGING_END = 'order.packaging_end';
-    const INVOICE_GENERATED = 'order.invoice_generated';
     const DELIVERY_START = 'order.delivery_start';
     const DELIVERY_END = 'order.delivery_end';
 
