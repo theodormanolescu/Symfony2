@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
+
     const REPOSITORY = 'AppBundle:Order';
-    
     const STATUS_NEW = 1;
     const STATUS_PROCESSING = 10;
     const STATUS_PROCESSING_PRODUCTS_MISSING = 11;
@@ -56,7 +56,7 @@ class Order
      * })
      */
     private $customer;
-    
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -65,12 +65,31 @@ class Order
     private $productLines;
 
     /**
+     * @var Address
+     *
+     * @ORM\ManyToOne(targetEntity="Address")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id")
+     * })
+     */
+    private $shippingAddress;
+
+    /**
+     * @var Address
+     *
+     * @ORM\ManyToOne(targetEntity="Address")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id")
+     * })
+     */
+    private $billingAddress;
+
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -80,8 +99,7 @@ class Order
      * @param integer $status
      * @return Order
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -92,8 +110,7 @@ class Order
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -103,8 +120,7 @@ class Order
      * @param \DateTime $createDate
      * @return Order
      */
-    public function setCreateDate($createDate)
-    {
+    public function setCreateDate($createDate) {
         $this->createDate = $createDate;
 
         return $this;
@@ -115,8 +131,7 @@ class Order
      *
      * @return \DateTime 
      */
-    public function getCreateDate()
-    {
+    public function getCreateDate() {
         return $this->createDate;
     }
 
@@ -126,8 +141,7 @@ class Order
      * @param \AppBundle\Entity\Customer $customer
      * @return Order
      */
-    public function setCustomer(\AppBundle\Entity\Customer $customer = null)
-    {
+    public function setCustomer(\AppBundle\Entity\Customer $customer = null) {
         $this->customer = $customer;
 
         return $this;
@@ -138,39 +152,61 @@ class Order
      *
      * @return \AppBundle\Entity\Customer 
      */
-    public function getCustomer()
-    {
+    public function getCustomer() {
         return $this->customer;
     }
-    
-    public function getProductLines()
-    {
+
+    public function getProductLines() {
         return $this->productLines;
     }
 
-    public function setProductLines(array $productLines)
-    {
+    public function setProductLines(array $productLines) {
         $this->productLines = $productLines;
         return $this;
     }
-    
-    public function addProductLine(OrderProductLine $productLine)
-    {
+
+    public function addProductLine(OrderProductLine $productLine) {
         $productLine->setOrder($this);
         $this->productLines[] = $productLine;
         return $this;
     }
 
-    public function __toString()
-    {
+    /**
+     * Get shippingAddress
+     *
+     * @return \AppBundle\Entity\Address 
+     */
+    public function getShippingAddress() {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * Get billingAddress
+     *
+     * @return \AppBundle\Entity\Address 
+     */
+    public function getBillingAddress() {
+        return $this->billingAddress;
+    }
+
+    public function setShippingAddress(Address $shippingAddress) {
+        $this->shippingAddress = $shippingAddress;
+        return $this;
+    }
+
+    public function setBillingAddress(Address $billingAddress) {
+        $this->billingAddress = $billingAddress;
+        return $this;
+    }
+
+    public function __toString() {
         return (string) $this->getId();
     }
 
     /**
      * @ORM\PrePersist 
      */
-    public function prePersist()
-    {
+    public function prePersist() {
         if (!$this->id) {
             $this->status = self::STATUS_NEW;
         }

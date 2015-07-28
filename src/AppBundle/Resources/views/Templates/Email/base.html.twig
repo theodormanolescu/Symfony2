@@ -15,7 +15,7 @@
             <div id="container" style="width: 600px" >
                 <div id="header">
                     {% block header %}
-                        <h1> {{ 'company_name'|trans|capitalize }}</h1>
+                        <h1> {{ 'company.name'|trans|capitalize }}</h1>
                     {% endblock %}
                 </div>
                 <div id="content">
@@ -25,7 +25,7 @@
                 <div id="footer" style="font-size: 10px">
                     {% block footer %}
                         <hr/>
-                        {{ 'copyright'|trans|capitalize }} {{ "now"|date("Y") }} {{ 'company_name'|trans}}
+                        {{ 'copyright'|trans|capitalize }} {{ "now"|date("Y") }} {{ 'company.name'|trans}}
                     {% endblock %}
                 </div>
             </div>

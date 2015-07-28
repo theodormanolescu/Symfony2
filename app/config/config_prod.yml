@@ -18,10 +18,11 @@ monolog:
             action_level: error
             handler:      nested
             channels: ["!json_rpc"]
-        nested:
-            type:  stream
-            path:  "%kernel.logs_dir%/%kernel.environment%.log"
-            level: debug
+        main:
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  info
+            channels: ["!json_rpc"]
         console:
             type:  console
         json_rpc:

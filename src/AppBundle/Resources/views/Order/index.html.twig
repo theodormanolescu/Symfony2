@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content%}
+    <a class="button" href="{{ path('order_new') }}">
+        New Order
+    </a>
     <table class="records_list">
         <thead>
             <tr>
@@ -44,7 +47,4 @@
             {% endfor %}
         </tbody>
     </table>
-    <a class="button" href="{{ path('order_new') }}">
-        New Order
-    </a>
 {% endblock %}

@@ -22,8 +22,7 @@ class OrderController extends Controller
      * Lists all Order entities.
      *
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('AppBundle:Order')->findAll();
@@ -34,40 +33,29 @@ class OrderController extends Controller
     }
 
     /**
-     * Creates a new Order entity.
+     * Creates a new Order.
      *
      */
-    public function createAction(Request $request)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
+    public function createAction(Request $request) {
         $postOrder = $request->get('appbundle_order');
         $quantities = $request->get('quantity');
-
-        $order = new Order();
-
-        $order->setCustomer(
-                $entityManager
-                        ->getRepository(Customer::REPOSITORY)
-                        ->find($postOrder['customer'])
-        );
+        /* @var $orderService \AppBundle\Service\OrderService  */
+        $orderService = $this->get(\AppBundle\Service\OrderService::ID);
+        $customerId = $postOrder['customer'];
+        $productLines = array();
 
         foreach ($postOrder['productLines'] as $productSaleId => $value) {
-            $productLine = new OrderProductLine();
-            $productLine->setProductSale(
-                    $entityManager
-                            ->getRepository(ProductSale::REPOSITORY)
-                            ->find($productSaleId)
+            $productLines[] = array(
+                'id' => $productSaleId,
+                'quantity' => $quantities[$productSaleId]
             );
-            $productLine->setQuantity($quantities[$productSaleId]);
-            $entityManager->persist($productLine);
-            $order->addProductLine($productLine);
         }
 
-        $entityManager->persist($order);
-        $entityManager->flush();
+        $orderId = $orderService->createOrder($customerId, $productLines);
+
 
         return $this->redirect(
-                        $this->generateUrl('order_show', array('id' => $order->getId()))
+                        $this->generateUrl('order_show', array('id' => $orderId))
         );
     }
 
@@ -78,8 +66,7 @@ class OrderController extends Controller
      *
      * @return Form The form
      */
-    private function createCreateForm(Order $entity)
-    {
+    private function createCreateForm(Order $entity) {
         $form = $this->createForm(new OrderType(), $entity, array(
             'action' => $this->generateUrl('order_create'),
             'method' => 'POST',
@@ -94,8 +81,7 @@ class OrderController extends Controller
      * Displays a form to create a new Order entity.
      *
      */
-    public function newAction()
-    {
+    public function newAction() {
         $entity = new Order();
         $form = $this->createCreateForm($entity);
 
@@ -109,8 +95,7 @@ class OrderController extends Controller
      * Finds and displays a Order entity.
      *
      */
-    public function showAction($id)
-    {
+    public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Order')->find($id);
@@ -131,8 +116,7 @@ class OrderController extends Controller
      * Displays a form to edit an existing Order entity.
      *
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Order')->find($id);
@@ -158,8 +142,7 @@ class OrderController extends Controller
      *
      * @return Form The form
      */
-    private function createEditForm(Order $entity)
-    {
+    private function createEditForm(Order $entity) {
         $form = $this->createForm(new OrderType(), $entity, array(
             'action' => $this->generateUrl('order_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -174,8 +157,7 @@ class OrderController extends Controller
      * Edits an existing Order entity.
      *
      */
-    public function updateAction(Request $request, $id)
-    {
+    public function updateAction(Request $request, $id) {
         $entityManager = $this->getDoctrine()->getManager();
         $postOrder = $request->get('appbundle_order');
         $quantities = $request->get('quantity');
@@ -220,8 +202,7 @@ class OrderController extends Controller
      * Deletes a Order entity.
      *
      */
-    public function deleteAction(Request $request, $id)
-    {
+    public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -247,8 +228,7 @@ class OrderController extends Controller
      *
      * @return Form The form
      */
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder()
                         ->setAction($this->generateUrl('order_delete', array('id' => $id)))
                         ->setMethod('DELETE')

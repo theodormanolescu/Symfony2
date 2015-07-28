@@ -244,6 +244,7 @@ class ProductSaleController extends Controller
                 )
                 ->setParameter('code', "$code%")
                 ->getQuery()
+                ->setMaxResults(10)
                 ->getResult();
         $response = array();
         foreach ($products as $productSale) {

@@ -15,17 +15,17 @@ class ServerController extends Controller
         $requestContent = $request->getContent();
         $logger = $this->get(Logger::ID)->getLogger();
         $logger->addInfo('request', array('content' => $requestContent));
-        
+
         $server = $this->get(Server::ID);
-        
+
         $authChecker = $this->get('security.authorization_checker');
         if (false === $authChecker->isGranted($service, $server)) {
             throw $this->createAccessDeniedException('Access denied');
         }
-        
+
         $result = $server->handle($requestContent, $service);
         $result = $result->toArray();
-        $logger->addInfo('response', $result);
+        $logger->addInfo('response', array('result' => $result));
         return new JsonResponse($result);
     }
 
