@@ -7,6 +7,8 @@ use AppBundle\Entity\Order;
 use AppBundle\Entity\OrderProductLine;
 use AppBundle\Entity\ProductSale;
 use AppBundle\Form\OrderType;
+use AppBundle\Service\Document\DocumentService;
+use AppBundle\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,8 +41,8 @@ class OrderController extends Controller
     public function createAction(Request $request) {
         $postOrder = $request->get('appbundle_order');
         $quantities = $request->get('quantity');
-        /* @var $orderService \AppBundle\Service\OrderService  */
-        $orderService = $this->get(\AppBundle\Service\OrderService::ID);
+        /* @var $orderService OrderService  */
+        $orderService = $this->get(OrderService::ID);
         $customerId = $postOrder['customer'];
         $productLines = array();
 
@@ -235,6 +237,14 @@ class OrderController extends Controller
                         ->add('submit', 'submit', array('label' => 'Delete'))
                         ->getForm()
         ;
+    }
+
+    public function viewInvoiceAction($orderId) {
+        /* @var $documentService DocumentService */
+        $documentService = $this->get(DocumentService::ID);
+        $html = $documentService->getInvoiceHtml($orderId);
+        
+        return new \Symfony\Component\HttpFoundation\Response($html);
     }
 
 }

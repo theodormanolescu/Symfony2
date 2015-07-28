@@ -6,6 +6,7 @@ use AppBundle\Document\Document;
 use AppBundle\Document\ProductLine;
 use AppBundle\Entity\Order;
 use AppBundle\Event\Order\OrderEvent;
+use AppBundle\Exception\Document\DocumentNotFoundException;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -43,6 +44,17 @@ class DocumentService
         $this->twigEngine = $twigEngine;
         $this->eventDispatcher = $eventDispatcher;
         $this->documentManager = $documentManager->getManager();
+    }
+
+    public function getInvoiceHtml($orderNumber) {
+        $repository = $this->documentManager->getRepository(Document::REPOSITORY);
+        $document = $repository->findOneBy(
+                array('type' => 'invoice', 'orderNumber' => (int) $orderNumber)
+        );
+        if (!$document) {
+            throw new DocumentNotFoundException();
+        }
+        return $document->getBodyHtml();
     }
 
     public function generateInvoice(Order $order) {
