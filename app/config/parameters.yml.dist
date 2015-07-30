@@ -5,7 +5,7 @@ parameters:
     database_port:     ~
     database_name:     symfony
     database_user:     root
-    database_password: ~
+    database_password: mysql
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
@@ -19,7 +19,7 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
     fixtures:
-        products_per_category: #number
-    communication.external_provider_host: #http://
-    communication.username: #user
-    communication.password: #pass
+        products_per_category: 10
+    communication.external_provider_host: http://symfony.local
+    communication.username: user
+    communication.password: pass

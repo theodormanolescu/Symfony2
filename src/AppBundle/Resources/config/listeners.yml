@@ -20,7 +20,6 @@ services:
         arguments: [@app.communication]
         tags:
             - {name: kernel.event_listener,event: %app.order_after_create%,method:onAfterCreate}
-            - {name: kernel.event_listener,event: %app.order_invoice_generated%,method:onInvoiceGenerated}
             - {name: kernel.event_listener,event: %app.order_delivery_start%,method:onDeliveryStart}
             - {name: kernel.event_listener,event: %app.order_delivery_end%,method:onDeliveryEnd}
     app.email_communication_listener:
