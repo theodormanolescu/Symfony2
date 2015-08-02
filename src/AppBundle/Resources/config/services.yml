@@ -12,7 +12,9 @@ services:
         class: AppBundle\Service\WarehouseService
         parent: app.doctrine_aware
         tags:
-            - {name: json_rpc.service, method: getAll}        
+            - {name: json_rpc.service, method: getAll} 
+        calls:
+            - ["setUtilService", [@app.util]] 
     app.catalog:
         class: AppBundle\Service\CatalogService
         parent: app.doctrine_aware        
@@ -40,3 +42,6 @@ services:
     app.delivery:
         class: AppBundle\Service\DeliveryService
         parent: app.doctrine_aware
+    app.util:
+        class: AppBundle\Service\UtilService
+        arguments: [@doctrine, @logger]

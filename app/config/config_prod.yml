@@ -17,17 +17,7 @@ monolog:
             type:   stream
             path:   "%kernel.logs_dir%/%kernel.environment%.log"
             level:  info
-            channels: ["!json_rpc"]
+            channels: ["app"]
+            formatter: monolog.formatter.logstash
         console:
             type:  console
-        json_rpc:
-            type:   stream
-            path:   "%kernel.logs_dir%/json-rpc-%kernel.environment%.log"
-            level:  info
-            channels: ["json_rpc"]
-        elasticsearch:
-            type:   elasticsearch
-            elasticsearch:
-                host: localhost
-            level: info
-            channels: [app, json_rpc]

@@ -1,7 +1,7 @@
 doctrine_mongodb:
     connections:
         default:
-            server: mongodb://localhost:27017
+            server: mongodb://10.10.10.1:27017
             options: {}
     document_managers:
         default:

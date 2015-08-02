@@ -12,8 +12,17 @@ class WarehouseService extends AbstractDoctrineAware
 
     const ID = 'app.warehouse';
 
-    public function getAll()
-    {
+    /**
+     *
+     * @var UtilService
+     */
+    private $utilService;
+
+    function setUtilService(UtilService $utilService) {
+        $this->utilService = $utilService;
+    }
+
+    public function getAll() {
         return $this->entityManager
                         ->createQueryBuilder()
                         ->select('warehouse')
@@ -22,39 +31,41 @@ class WarehouseService extends AbstractDoctrineAware
                         ->getArrayResult();
     }
 
-    public function getProductStocks($productId)
-    {
+    public function getProductStocks($productId) {
         $stocks = $this->entityManager->
                 getRepository(ProductStock::REPOSITORY)
                 ->findBy(array('product' => $productId));
         if (empty($stocks)) {
-            $this->logger->addNotice(sprintf('No stocks found for product %s', $productId));
+            return array();
         }
 
         return $stocks;
     }
 
-    public function reserveProducts(Order $order)
-    {
-        if ($this->checkProductsStock($order)) {
-            $this->doReserveProducts($order);
-            $this->eventDispatcher->dispatch(
-                    OrderEvent::PRODUCTS_RESERVED, new OrderEvent($order)
-            );
-        } else {
-            $this->eventDispatcher->dispatch(
-                    OrderEvent::PRODUCTS_RESERVATION_FAILED, new OrderEvent($order)
-            );
+    public function reserveProducts(Order $order) {
+        $lockName = 'reserve_products';
+        $this->utilService->getLock($lockName);
+        try {
+            if ($this->checkProductsStock($order)) {
+                $this->doReserveProducts($order);
+                $this->eventDispatcher->dispatch(
+                        OrderEvent::PRODUCTS_RESERVED, new OrderEvent($order)
+                );
+            } else {
+                $this->eventDispatcher->dispatch(
+                        OrderEvent::PRODUCTS_RESERVATION_FAILED, new OrderEvent($order)
+                );
+            }
+        } finally {
+            $this->utilService->releaseLock($lockName);
         }
     }
 
-    private function doReserveProducts(Order $order)
-    {
+    private function doReserveProducts(Order $order) {
         
     }
 
-    private function checkProductsStock(Order $order)
-    {
+    private function checkProductsStock(Order $order) {
         $quantities = array();
         foreach ($order->getProductLines() as $productLine) {
             $quantities[$productLine->getProductSale()->getProduct()->getId()] = $productLine->getQuantity();
@@ -69,8 +80,7 @@ class WarehouseService extends AbstractDoctrineAware
         return empty($quantities);
     }
 
-    public function getProductStocksByProductIds(array $productIds)
-    {
+    public function getProductStocksByProductIds(array $productIds) {
         return $this->entityManager
                         ->createQueryBuilder()
                         ->select('productStock')
@@ -80,8 +90,7 @@ class WarehouseService extends AbstractDoctrineAware
                         ->getQuery();
     }
 
-    public function packageProducts(Order $order)
-    {
+    public function packageProducts(Order $order) {
         $this->eventDispatcher->dispatch(OrderEvent::PACKAGING_START, new OrderEvent($order));
         $this->eventDispatcher->dispatch(OrderEvent::PACKAGING_END, new OrderEvent($order));
     }
